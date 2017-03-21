@@ -7,7 +7,7 @@
 ## An output of the function is a list that includes 
 ## the binomial regression model and binary SVM models.
 
-require(e1071) # for using SVM as base classifier
+install.packages("e1071") # for using SVM as base classifier
 
 
 ## data: data.frame containing the data features and labels
