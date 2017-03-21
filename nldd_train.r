@@ -28,11 +28,11 @@ nldd_train <- function(data,label_index,feature_scale=TRUE)
   bin_model <- list(1)
   for(i in 1:y_length)
   {
-  	if(sum(data2[,i]) > 0)
-  	{
+    if(sum(data2[,i]) > 0)
+    {
       tr <- cbind(y=as.factor(data2[,i]),data2[,-c(1:y_length)])  		
-	    bin_model[[i]] <- svm(y~.,data=tr,probability=TRUE,kernel="linear",scale=FALSE)
-	}
+      bin_model[[i]] <- svm(y~.,data=tr,probability=TRUE,kernel="linear",scale=FALSE)
+    }
     if(sum(T1[,i]) > 0)
     {
       tr <- cbind(y=as.factor(T1[,i]),T1[,-c(1:y_length)])
@@ -42,9 +42,8 @@ nldd_train <- function(data,label_index,feature_scale=TRUE)
       temp <- as.data.frame(attr(pred,"probabilities"))
       a <- which(names(temp)=="1")
       pred_M[,i] <- attr(pred,"probabilities")[,a]       
-      }
+    }
   }
-
 	X_tr <- X_tr2 <- as.matrix(T1[,-c(1:y_length)])
 	X_ts <- X_ts2 <- as.matrix(T2[,-c(1:y_length)])
 	if(feature_scale=="TRUE") #Standardization
@@ -58,8 +57,7 @@ nldd_train <- function(data,label_index,feature_scale=TRUE)
     		X_ts2[,i] <- (X_ts[,i]-temp.mean)/temp.sd
 	    }
 	}
-
-  S <- c(0,0,0)
+  	S <- c(0,0,0)
 	ind <- 1:nrow(T1)
 	T <- as.matrix(T1[,1:y_length])
 	for(i in 1:nrow(T2))	#Obtain set S
@@ -69,7 +67,6 @@ nldd_train <- function(data,label_index,feature_scale=TRUE)
   		temp2 <- t(t(X_tr2)-X_ts2[i,])
   		dx <- sqrt(apply(temp2*temp2,1,sum))
   		dist <- cbind(dx,dy)
-
   		a <- which(dy==min(dy))
   		a2 <- which(dx[a]==min(dx[a]))
   		indy <- a[sort(a2)[1]]
@@ -78,13 +75,12 @@ nldd_train <- function(data,label_index,feature_scale=TRUE)
   		indx <- a[sort(a2)[1]]
   		if(indy!=indx) ind <- c(indy,indx)
   		if(indy==indx) ind <- indy
-
   		S2 <- dist[ind,]
   		temp <- t(t(T[ind,])==as.numeric(T2[i,1:y_length]))
   		if(length(ind)==1) loss <-   y_length-sum(temp)
- 		  if(length(ind)>1) loss <- (y_length-apply(temp,1,sum))  
-      if(length(ind)>1) S2 <- cbind(S2,loss)
-      if(length(ind)==1) S2 <- c(S2,loss)
+ 		if(length(ind)>1) loss <- (y_length-apply(temp,1,sum))  
+      		if(length(ind)>1) S2 <- cbind(S2,loss)
+     		if(length(ind)==1) S2 <- c(S2,loss)
   		S <- rbind(S,S2)
 	}
 	S <- as.data.frame(S[-1,])
