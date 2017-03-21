@@ -18,13 +18,13 @@ nldd_test <- function(train_data,test_data,nldd_object,label_index,feature_scale
 	pred_M <- matrix(rep(0,nrow(T2)*y_length),ncol=y_length)
   	for(i in 1:y_length)
   	{
-  		m <- (nldd_object$BR_model)[[i]]
-  		pred <- predict(m,T2,probability=TRUE)
-    	temp <- as.data.frame(attr(pred,"probabilities"))
-    	a <- which(names(temp)=="1")
-    	pred_M[,i] <- attr(pred,"probabilities")[,a]
-    }
-    X_tr <- X_tr2 <- as.matrix(T1[,-c(1:y_length)])
+  	  m <- (nldd_object$BR_model)[[i]]
+  	  pred <- predict(m,T2,probability=TRUE)
+    	  temp <- as.data.frame(attr(pred,"probabilities"))
+    	  a <- which(names(temp)=="1")
+    	 pred_M[,i] <- attr(pred,"probabilities")[,a]
+        }
+        X_tr <- X_tr2 <- as.matrix(T1[,-c(1:y_length)])
 	X_ts <- X_ts2 <- as.matrix(T2[,-c(1:y_length)])
 	if(feature_scale=="TRUE") #Standardization
 	{
